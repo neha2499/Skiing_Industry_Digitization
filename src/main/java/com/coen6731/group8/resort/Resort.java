@@ -8,7 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Resort {
 
 
-
+    @Id
+    private String id;
 
     private Integer skierID;
 
@@ -23,8 +24,9 @@ public class Resort {
     private Integer time;
 
 
-    public Resort(Integer skierID, Integer resortID, Integer liftID, Integer seasonID, Integer dayID, Integer time) {
-
+    public Resort(String id,Integer skierID, Integer resortID, Integer liftID, Integer seasonID, Integer dayID, Integer time) {
+        super();
+        this.id=id;
         this.skierID = skierID;
         this.resortID = resortID;
         this.liftID = liftID;
@@ -33,7 +35,13 @@ public class Resort {
         this.time = time;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Integer getSkierID() {
         return skierID;
@@ -81,6 +89,20 @@ public class Resort {
 
     public void setTime(Integer time) {
         this.time = time;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Resort{" +
+                "id='" + id + '\'' +
+                ", skierID=" + skierID +
+                ", resortID=" + resortID +
+                ", liftID=" + liftID +
+                ", seasonID=" + seasonID +
+                ", dayID=" + dayID +
+                ", time=" + time +
+                '}';
     }
 }
 
