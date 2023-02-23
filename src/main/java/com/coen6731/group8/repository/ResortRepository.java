@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.coen6731.group8.resort.Resort;
 
 @Repository
-public interface ResortRepository extends MongoRepository<Resort, String> {
+public interface ResortRepository extends MongoRepository<Resort, String>, customRepo {
 }
