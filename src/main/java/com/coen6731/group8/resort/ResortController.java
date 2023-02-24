@@ -31,7 +31,7 @@ public class ResortController {
     @GetMapping("/resorts/{resortID}/seasons/{seasonID}/day/{dayID}/skiers")
     public List<Resort> retrieveUser(@PathVariable String resortID, @PathVariable String seasonID,@PathVariable String dayID){
         System.out.println(resortID+seasonID+dayID);
-        List<Resort> tmp = service.fetchStudentsByProperties(null,Integer.valueOf(resortID),null,Integer.valueOf(seasonID),Integer.valueOf(dayID),null,2);
+        List<Resort> tmp = service.fetchStudentsByProperties(null,Integer.valueOf(resortID),null,Integer.valueOf(seasonID),Integer.valueOf(dayID),null);
 
         if(tmp.size()==0){
             throw new UserNotFoundException("id:"+resortID);
@@ -55,7 +55,13 @@ public class ResortController {
 
     }
 
+    @PostMapping("/skiers/{resortID}/seasons/{seasonID}/days/{dayID}/skiers/{skierID}")
+    public Resort createResort(@PathVariable String resortID, @PathVariable String seasonID,@PathVariable String dayID,@PathVariable String skierID, @RequestBody Resort resort ){
+        return service.createskier(Integer.valueOf(resortID),Integer.valueOf(seasonID),Integer.valueOf(dayID),Integer.valueOf(skierID));}
+
+
     @PostMapping("/resorts")
     public Resort createResort(@RequestBody Resort resort){ return service.createResort(resort);}
+
 
 }

@@ -37,9 +37,11 @@ public class ResortDaoService {
 
 
 
-    public List<Resort> fetchStudentsByProperties(Integer skierID, Integer resortID, Integer liftID, Integer seasonID, Integer dayID, Integer time, Integer page) {
+    public List<Resort> fetchStudentsByProperties(Integer skierID, Integer resortID, Integer liftID, Integer seasonID, Integer dayID, Integer time) {
 
-        return resortRepository.findResortByProperties(skierID, resortID, liftID, seasonID,dayID,time,PageRequest.of(page, 15));
+        return resortRepository.findResortByProperties(skierID, resortID, liftID, seasonID,dayID,time);
     }
 
+    public Resort createskier(Integer valueOf, Integer valueOf1, Integer valueOf2, Integer valueOf3) {
+    }
 }

@@ -22,7 +22,7 @@ public class  customRepoImpl implements customRepo {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<Resort> findResortByProperties(Integer skierID, Integer resortID, Integer liftID, Integer seasonID, Integer dayID, Integer time, Pageable page){
+    public List<Resort> findResortByProperties(Integer skierID, Integer resortID, Integer liftID, Integer seasonID, Integer dayID, Integer time){
 //    final Query query = new Query().with(page);
 //        query.fields();
     System.out.println(resortID.toString()+dayID.toString()+"here");
@@ -48,6 +48,31 @@ public class  customRepoImpl implements customRepo {
         System.out.println(k.toString());
         return k;
 }
+
+
+    public Integer findNoSkiers( Integer resortID, Integer seasonID, Integer dayID) {
+
+        final List<Criteria> criteria1 = new ArrayList<Criteria>();
+
+        if (resortID != null )
+            criteria1.add(Criteria.where("resortID").is(resortID));
+
+        if (seasonID != null)
+            criteria1.add(Criteria.where("seasonID").is(seasonID));
+        if (dayID != null)
+            criteria1.add(Criteria.where("dayId").is(dayID));
+
+
+        Query query1 = new Query();
+        if (!criteria1.isEmpty())
+            query1.addCriteria(new Criteria().andOperator(criteria1.toArray(new Criteria[criteria1.size()])));
+
+        System.out.println(query1.toString());
+        List<Integer> k = mongoTemplate.findDistinct(query1,"skierID",Resort.class,Integer.class);
+        System.out.println(k.toString());
+        return k.size();
+    }
+
 }
 
 
