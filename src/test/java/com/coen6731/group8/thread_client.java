@@ -90,10 +90,11 @@ public class thread_client implements Runnable {
 
                 end_now = Instant.now();
 //                timeElapsed = Duration.between(start_now, end_now);
+//                timeElapsed = timeElapsed.dividedBy(n);
 //                time_post.add(timeElapsed);
 
             }
-//                timeElapsed = timeElapsed.dividedBy(n);
+            //                timeElapsed = timeElapsed.dividedBy(n);
                 System.out.println("Creating " + threadName + "executed success");
             }catch(Exception e){
                 System.out.println("Thread " + threadName + " interrupted."+e);

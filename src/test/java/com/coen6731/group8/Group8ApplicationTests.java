@@ -40,22 +40,13 @@ class Group8ApplicationTests {
 		Instant start_now, end_now;
 		Duration timeElapsed;
 		Skier skier = new Skier();
-		int total_client =136;
-
-		Body body = new Body(skier.getTime(),skier.getLiftID());
-		WebClient webClient = WebClient.create("http://localhost:8083");
-		String responseBody = webClient.post().uri("/skiers/"+String.valueOf(skier.getSkierID())+"/seasons/"+String.valueOf(skier.getSeasonID())+"/days/"+String.valueOf(skier.getDayID())+"/skiers/"+String.valueOf(skier.getSkierID()))
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.body(Mono.just(body), Body.class)
-				.retrieve()
-				.bodyToMono(String.class)
-				.block();
+		int total_client =100;
 
 
-		System.out.println(responseBody);
+
 		String url = "http://localhost:8083";
 
-		Integer total =0;
+
 		Integer no_clients =32;
 		Integer no_post  = 10 ;
 		List<thread_client> clients = new ArrayList<>();
@@ -69,14 +60,6 @@ class Group8ApplicationTests {
 			R1.start();
 			clients.add(R1);
 		}
-
-//		for (int i = 0; i < no_clients; i++) {
-//			try {
-//				clients.get(i).join();
-//			} catch (InterruptedException e) {
-//				System.out.println("Thread interrupted");
-//			}
-//		}
 
 		int flag=0;
 		while (true) {
@@ -93,8 +76,8 @@ class Group8ApplicationTests {
 
 
 
-		int i1 = (1000 - 320) / total_client;
-		System.out.println(String.valueOf(i1)+"fjhgfhfyh"+String.valueOf(total));
+		int i1 = (1000 - 320) / (total_client-no_clients);
+		System.out.println(String.valueOf(i1)+"<><><><><><><><><><><><><><><><><><><><><>");
 
 		for (int i = no_clients; i < total_client; i++) {
 
