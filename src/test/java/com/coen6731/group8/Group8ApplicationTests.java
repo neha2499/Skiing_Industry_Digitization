@@ -40,6 +40,7 @@ class Group8ApplicationTests {
 		Instant start_now, end_now;
 		Duration timeElapsed;
 		Skier skier = new Skier();
+		int total_client =136;
 
 		Body body = new Body(skier.getTime(),skier.getLiftID());
 		WebClient webClient = WebClient.create("http://localhost:8083");
@@ -77,51 +78,32 @@ class Group8ApplicationTests {
 //			}
 //		}
 
-		int k =0,flag=0;
-		while (k<1000000) {
+		int flag=0;
+		while (true) {
 			for (int i = 0; i < no_clients; i++) {
 				Thread t = clients.get(i).getT();
-				if (t.isAlive()) {
-					try {
-						t.join();
-					} catch (InterruptedException e) {
-						// ignore
-					}
-				} else {
-					// interrupt all other threads and remove them from the list
-					for (int j = 0; j < no_clients; j++) {
-						Thread t2 = clients.get(j).getT();
-						if (t2 != t) {
-							t2.interrupt();
-						}
-					}
+				if (t.isAlive()) continue;
+				else{
 					flag =1;
-
 				}
 			}
 			if (flag ==1)
 				break;
-
-		}
-		for (int j = 0; j < no_clients; j++) {
-			total += clients.get(j).getCount();
 		}
 
-		no_clients =100;
-		int i1 = (1000 - total) / no_clients;
+
+
+		int i1 = (1000 - 320) / total_client;
 		System.out.println(String.valueOf(i1)+"fjhgfhfyh"+String.valueOf(total));
-		no_post =  i1;
-		for (int i = 0; i < no_clients; i++) {
-			if (i > 31){
-				thread_client R1 = new thread_client(Integer.toString(i), url, no_post);
-				R1.start();
-				clients.add(R1);
-				}
-			else
-				clients.get(i).start();
+
+		for (int i = no_clients; i < total_client; i++) {
+
+			thread_client R1 = new thread_client(Integer.toString(i), url, i1);
+			R1.start();
+			clients.add(R1);
 		}
 
-		for (int i = 0; i < no_clients; i++) {
+		for (int i = 0; i < total_client; i++) {
 			try {
 				clients.get(i).join();
 			} catch (InterruptedException e) {
