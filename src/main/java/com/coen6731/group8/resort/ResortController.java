@@ -78,7 +78,10 @@ public class ResortController {
 //
 
 
-
+    @PostMapping("/check_status")
+    public ResponseEntity<String> api_alive_test(){
+        return  ResponseEntity.status(HttpStatus.FOUND).body("Server is working");
+    }
 
 
     @PostMapping("/resorts/{resortID}/seasons")

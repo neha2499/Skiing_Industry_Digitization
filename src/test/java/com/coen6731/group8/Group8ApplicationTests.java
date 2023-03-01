@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -12,23 +13,47 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 @SpringBootTest
 class Group8ApplicationTests {
+	String url = "http://localhost:8083";
+
+
+
 	@Test
-	void testAudiopost() throws Exception {
+	void check_api() throws Exception {
+		WebClient webClient = WebClient.create(url);
+		String responseBody = webClient.post().uri("/check_status")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.retrieve()
+				.bodyToMono(String.class)
+				.block();
+		System.out.println(responseBody);
+	}
+
+	@Test
+	void testskierpost() throws Exception {
 		Skier skier = new Skier();
 
 		Body body = new Body(skier.getTime(),skier.getLiftID());
-		WebClient webClient = WebClient.create("http://localhost:8083");
-		String responseBody = webClient.post().uri("/skiers/"+String.valueOf(skier.getSkierID())+"/seasons/"+String.valueOf(skier.getSeasonID())+"/days/"+String.valueOf(skier.getDayID())+"/skiers/"+String.valueOf(skier.getSkierID()))
+		WebClient webClient = WebClient.create(url);
+//		ClientResponse responseBody = webClient.post().uri("/skiers/"+String.valueOf(skier.getSkierID())+"/seasons/"+String.valueOf(skier.getSeasonID())+"/days/"+String.valueOf(skier.getDayID())+"/skiers/"+String.valueOf(skier.getSkierID()))
+//				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+//				.bodyValue(body).exchange()
+//				.block();
+		String responseBody = webClient.post().uri("/skiers/" + String.valueOf(skier.getSkierID()) + "/seasons/" + String.valueOf(skier.getSeasonID()) + "/days/" + String.valueOf(skier.getDayID()) + "/skiers/" + String.valueOf(skier.getSkierID()))
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.body(Mono.just(body), Body.class)
 				.retrieve()
 				.bodyToMono(String.class)
 				.block();
 
+//		int statusCode = responseBody.statusCode().value();
 
 		System.out.println(responseBody);
 	}
@@ -40,11 +65,12 @@ class Group8ApplicationTests {
 		Instant start_now, end_now;
 		Duration timeElapsed;
 		Skier skier = new Skier();
-		int total_client =100;
+		int total_client =50;
+		int desired_no_post = 500;
 
 
 
-		String url = "http://localhost:8083";
+
 
 
 		Integer no_clients =32;
@@ -76,7 +102,7 @@ class Group8ApplicationTests {
 
 
 
-		int i1 = (1000 - 320) / (total_client-no_clients);
+		int i1 = (desired_no_post - (no_clients*no_post)) / (total_client-no_clients);
 		System.out.println(String.valueOf(i1)+"<><><><><><><><><><><><><><><><><><><><><>");
 
 		for (int i = no_clients; i < total_client; i++) {
@@ -104,11 +130,26 @@ class Group8ApplicationTests {
 
 
 		System.out.println(timeElapsed);
-//		ArrayList<Integer> time_dif = new ArrayList<>();
-//		for (int i = 0; i < no_clients; i++) {
-////			System.out.println(clients.get(i).getTimeElapsed().toMillisPart());
-//			time_dif.add(clients.get(i).getTimeElapsed().toMillisPart());
-//		}
+		ArrayList<Integer> time_dif = new ArrayList<>();
+		String fileName = "output.csv";
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+			for (int i = 0; i < total_client; i++) {
+				System.out.println(clients.get(i).getTime_post().toString());
+				ArrayList<String> myList = clients.get(i).getTime_post();
+
+
+
+					for (String str : myList) {
+						writer.write(str);
+						writer.newLine();
+
+
+	//			time_dif.add(clients.get(i).getTimeElapsed().toMillisPart());
+						}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 }

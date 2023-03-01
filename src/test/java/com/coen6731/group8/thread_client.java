@@ -1,46 +1,71 @@
 package com.coen6731.group8;
 
 
-
-
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+class start_end{
+    private String start;
+    private String end;
 
 
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    @Override
+    public String toString() {
+        return "start_end{" +
+                "start=" + start +
+                ", end=" + end +
+                '}';
+    }
+
+    public start_end(String start, String end) {
+        this.start = start;
+        this.end = end;
+    }
+}
 public class thread_client implements Runnable {
     private Thread t;
     private String threadName;
     private String url;
     int n;
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
 
     int count;
     private Instant start_now,end_now;
     private Duration timeElapsed;
 
-    public ArrayList<Duration> getTime_post() {
+    private ArrayList<String> time_post;
+    public ArrayList<String> getTime_post() {
         return time_post;
     }
 
 
 
-    private ArrayList<Duration> time_post;
+
 
     thread_client( String name, String url, Integer n) {
         threadName = name;
@@ -51,7 +76,7 @@ public class thread_client implements Runnable {
 
     public void run() {
         System.out.println("Running " +  threadName );
-
+        time_post = new ArrayList<>();
 
         try {
 
@@ -62,36 +87,37 @@ public class thread_client implements Runnable {
 
                 Body body = new Body(skier.getTime(), skier.getLiftID());
                 WebClient webClient = WebClient.create(url);
+                int response =0 ;
                 try {
-                    String responseBody = webClient.post().uri("/skiers/" + String.valueOf(skier.getSkierID()) + "/seasons/" + String.valueOf(skier.getSeasonID()) + "/days/" + String.valueOf(skier.getDayID()) + "/skiers/" + String.valueOf(skier.getSkierID()))
-                            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                            .body(Mono.just(body), Body.class)
-                            .retrieve()
-                            .bodyToMono(String.class)
-                            .block();
+                    ClientResponse responseBody = webClient.post().uri("/skiers/"+String.valueOf(skier.getSkierID())+"/seasons/"+String.valueOf(skier.getSeasonID())+"/days/"+String.valueOf(skier.getDayID())+"/skiers/"+String.valueOf(skier.getSkierID()))
+                                                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                                    .bodyValue(body).exchange()
+                                                    .block();
                     count+=1;
+                    response = responseBody.statusCode().value();
                 }catch(Exception e) {
                     for (int j=0;j<4;j++){
                         try {
-                            String responseBody = webClient.post().uri("/skiers/" + String.valueOf(skier.getSkierID()) + "/seasons/" + String.valueOf(skier.getSeasonID()) + "/days/" + String.valueOf(skier.getDayID()) + "/skiers/" + String.valueOf(skier.getSkierID()))
+                            ClientResponse responseBody = webClient.post().uri("/skiers/"+String.valueOf(skier.getSkierID())+"/seasons/"+String.valueOf(skier.getSeasonID())+"/days/"+String.valueOf(skier.getDayID())+"/skiers/"+String.valueOf(skier.getSkierID()))
                                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                                    .body(Mono.just(body), Body.class)
-                                    .retrieve()
-                                    .bodyToMono(String.class)
+                                    .bodyValue(body).exchange()
                                     .block();
+                            response = responseBody.statusCode().value();
                             break;
                         } catch (Exception ex) {
                             if (j >= 3)
                                 throw new RuntimeException(ex);
+
                         }
 
                     }
                 }
 
                 end_now = Instant.now();
-//                timeElapsed = Duration.between(start_now, end_now);
-//                timeElapsed = timeElapsed.dividedBy(n);
-//                time_post.add(timeElapsed);
+//                System.out.println(start_now.toString()+" "+end_now.toString());
+                timeElapsed = Duration.between(start_now, end_now);
+                start_end tmp =new start_end(start_now.toString(), end_now.toString());
+                time_post.add(start_now.toString()+","+"POST"+","+ timeElapsed.toMillis()+","+String.valueOf(response));
 
             }
             //                timeElapsed = timeElapsed.dividedBy(n);
@@ -146,6 +172,13 @@ public class thread_client implements Runnable {
         return end_now;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
 
 }
