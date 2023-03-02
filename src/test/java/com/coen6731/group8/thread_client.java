@@ -86,6 +86,7 @@ public class thread_client implements Runnable {
                 System.out.println(threadName+latch);
                 if (latch.getCount()==0)
                     break;
+                latch.countDown();
 
                 Skier skier = new Skier();
 

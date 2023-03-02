@@ -64,8 +64,8 @@ class Group8ApplicationTests {
 
 		Instant start_now, end_now;
 		Duration timeElapsed;
-		int total_client = 100;
-		int desired_no_post = 10000;
+		int total_client = 50;
+		int desired_no_post = 500;
 
 
 
@@ -73,7 +73,7 @@ class Group8ApplicationTests {
 
 
 		Integer no_clients =32;
-		Integer no_post  = 1000 ;
+		Integer no_post  = 10 ;
 		List<thread_client> clients = new ArrayList<>();
 
 		//////////////////////////////////////////////////////
@@ -131,10 +131,25 @@ class Group8ApplicationTests {
 		System.out.println(timeElapsed);
 		ArrayList<Integer> time_dif = new ArrayList<>();
 		String fileName = "output.csv";
+		ArrayList<String> x1 = new ArrayList<String>();
+		ArrayList<String> x2 = new ArrayList<String>();
+		ArrayList<String> x3 = new ArrayList<String>();
+		ArrayList<String> x4 = new ArrayList<String>();
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
 			for (int i = 0; i < total_client; i++) {
 				System.out.println(clients.get(i).getTime_post().toString());
 				ArrayList<String> myList = clients.get(i).getTime_post();
+				for(int k =0; k<myList.size();k++){
+					String y = myList.get(k);
+					String[] temp=y.split(",");
+					System.out.println(temp.toString());
+					x1.add(temp[0]);
+					x2.add(temp[1]);
+					x3.add(temp[2]);
+					x4.add(temp[3]);
+
+				}
+
 
 
 
@@ -149,6 +164,7 @@ class Group8ApplicationTests {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println(x1.toString()+x2.toString()+x3.toString());
 
 	}
 }
