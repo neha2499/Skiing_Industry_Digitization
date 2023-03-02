@@ -113,9 +113,7 @@ public class thread_client implements Runnable {
                                 throw new RuntimeException(ex);
 
                         }
-                        synchronized (this) {
-                            System.out.printf("[%s] Count: %d\n", threadName, this.count);
-                        }
+
 
                     }
                 }
