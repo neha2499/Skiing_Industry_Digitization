@@ -1,17 +1,15 @@
 package com.coen6731.group8;
 
 
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 
 class start_end{
     private String start;
@@ -48,13 +46,14 @@ class start_end{
     }
 }
 public class thread_client implements Runnable {
+    private final CountDownLatch latch;
     private Thread t;
     private String threadName;
     private String url;
     int n;
 
 
-    int count;
+    private int count = 0;
     private Instant start_now,end_now;
     private Duration timeElapsed;
 
@@ -67,10 +66,11 @@ public class thread_client implements Runnable {
 
 
 
-    thread_client( String name, String url, Integer n) {
+    thread_client(String name, String url, Integer n, CountDownLatch latch) {
         threadName = name;
         this.url =url;
         this.n =n;
+        this.latch =latch;
         System.out.println("Creating " +  threadName );
     }
 
@@ -79,9 +79,13 @@ public class thread_client implements Runnable {
         time_post = new ArrayList<>();
 
         try {
-
-            for (int i = 0; i < n; i++) {
+            int i =0;
+            while(true && i<n) {
                 start_now = Instant.now();
+                latch.countDown();
+                System.out.println(threadName+latch);
+                if (latch.getCount()==0)
+                    break;
 
                 Skier skier = new Skier();
 
@@ -109,9 +113,13 @@ public class thread_client implements Runnable {
                                 throw new RuntimeException(ex);
 
                         }
+                        synchronized (this) {
+                            System.out.printf("[%s] Count: %d\n", threadName, this.count);
+                        }
 
                     }
                 }
+                i+=1;
 
                 end_now = Instant.now();
 //                System.out.println(start_now.toString()+" "+end_now.toString());

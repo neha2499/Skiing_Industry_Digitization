@@ -5,7 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -16,12 +15,12 @@ import java.util.List;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 
 @SpringBootTest
 class Group8ApplicationTests {
-	String url = "http://155.248.226.228:8083";
+	String url = "http://localhost:8083";
 
 
 
@@ -39,6 +38,7 @@ class Group8ApplicationTests {
 	@Test
 	void testskierpost() throws Exception {
 		Skier skier = new Skier();
+
 
 		Body body = new Body(skier.getTime(),skier.getLiftID());
 		WebClient webClient = WebClient.create(url);
@@ -64,13 +64,12 @@ class Group8ApplicationTests {
 
 		Instant start_now, end_now;
 		Duration timeElapsed;
-		Skier skier = new Skier();
 		int total_client = 100;
-		int desired_no_post = 100000;
+		int desired_no_post = 10000;
 
 
 
-
+		CountDownLatch latch = new CountDownLatch(desired_no_post);
 
 
 		Integer no_clients =32;
@@ -82,7 +81,7 @@ class Group8ApplicationTests {
 		start_now = Instant.now();
 
 		for (int i = 0; i < no_clients; i++) {
-			thread_client R1 = new thread_client(Integer.toString(i), url, no_post);
+			thread_client R1 = new thread_client(Integer.toString(i), url, no_post,latch);
 			R1.start();
 			clients.add(R1);
 		}
@@ -102,12 +101,12 @@ class Group8ApplicationTests {
 
 
 
-		int i1 = (desired_no_post - (no_clients*no_post)) / (total_client-no_clients);
+		int i1 = desired_no_post;
 		System.out.println(String.valueOf(i1)+"<><><><><><><><><><><><><><><><><><><><><>");
 
 		for (int i = no_clients; i < total_client; i++) {
 
-			thread_client R1 = new thread_client(Integer.toString(i), url, i1);
+			thread_client R1 = new thread_client(Integer.toString(i), url, i1, latch);
 			R1.start();
 			clients.add(R1);
 		}

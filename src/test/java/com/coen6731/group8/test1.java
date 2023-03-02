@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 
 @SpringBootTest
@@ -62,9 +62,10 @@ class test1 {
 		Instant start_now, end_now;
 		Duration timeElapsed;
 		int total_client = 1;
-		int desired_no_post = 100000;
+		CountDownLatch latch = new CountDownLatch(10000);
+		int desired_no_post = 10000;
 		start_now = Instant.now();
-		thread_client R1 = new thread_client(Integer.toString(total_client), url, desired_no_post);
+		thread_client R1 = new thread_client(Integer.toString(total_client), url, desired_no_post, latch);
 		R1.start();
 		R1.join();
 		end_now = Instant.now();
