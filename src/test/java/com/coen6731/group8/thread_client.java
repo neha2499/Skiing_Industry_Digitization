@@ -80,9 +80,9 @@ public class thread_client implements Runnable {
 
         try {
             int i =0;
-            while(true && i<n) {
+            while(i<n) {
                 start_now = Instant.now();
-                latch.countDown();
+
                 System.out.println(threadName+latch);
                 if (latch.getCount()==0)
                     break;
@@ -120,6 +120,7 @@ public class thread_client implements Runnable {
                     }
                 }
                 i+=1;
+                latch.countDown();
 
                 end_now = Instant.now();
 //                System.out.println(start_now.toString()+" "+end_now.toString());
