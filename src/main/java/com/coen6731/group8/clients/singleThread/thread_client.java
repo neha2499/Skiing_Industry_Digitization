@@ -1,4 +1,4 @@
-package com.coen6731.group8;
+package com.coen6731.group8.clients.singleThread;
 
 
 import org.springframework.http.HttpHeaders;
@@ -95,9 +95,9 @@ public class thread_client implements Runnable {
                 int response =0 ;
                 try {
                     ClientResponse responseBody = webClient.post().uri("/skiers/"+String.valueOf(skier.getSkierID())+"/seasons/"+String.valueOf(skier.getSeasonID())+"/days/"+String.valueOf(skier.getDayID())+"/skiers/"+String.valueOf(skier.getSkierID()))
-                                                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                                                    .bodyValue(body).exchange()
-                                                    .block();
+                            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                            .bodyValue(body).exchange()
+                            .block();
                     count+=1;
                     response = responseBody.statusCode().value();
                 }catch(Exception e) {
@@ -129,11 +129,11 @@ public class thread_client implements Runnable {
 
             }
             //                timeElapsed = timeElapsed.dividedBy(n);
-                System.out.println("Creating " + threadName + "executed success");
-            }catch(Exception e){
-                System.out.println("Thread " + threadName + " interrupted."+e);
-            }
+            System.out.println("Creating " + threadName + "executed success");
+        }catch(Exception e){
+            System.out.println("Thread " + threadName + " interrupted."+e);
         }
+    }
 
 
 
