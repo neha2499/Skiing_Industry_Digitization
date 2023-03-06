@@ -8,6 +8,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ class SingleThread {
         Instant start_now, end_now, start_now1, end_now1;
         Duration timeElapsed;
 
-        int desired_no_post = 500;
+        int desired_no_post = 10000;
 
         start_now = Instant.now();
         ArrayList<Integer> time = new ArrayList<>();
