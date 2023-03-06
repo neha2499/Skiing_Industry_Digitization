@@ -1,7 +1,7 @@
 # Group 8
 
-Cloud Plathform -- Oracle 
-DataBase -- MongoDB
+Cloud Plathform - Oracle 
+DataBase - MongoDB
 
 
 
