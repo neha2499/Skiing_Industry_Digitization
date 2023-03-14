@@ -43,8 +43,8 @@ class MultiThread {
 
 		Instant start_now, end_now;
 		Duration timeElapsed;
-		int total_client = 100;
-		int desired_no_post = 10000;
+		int total_client = 100;//50
+		int desired_no_post = 10000;//500
 		Analytics analytics=new Analytics();
 
 
@@ -53,7 +53,7 @@ class MultiThread {
 
 
 		Integer no_clients =32;
-		Integer no_post  = 1000 ;
+		Integer no_post  = 1000 ;//10
 		List<thread_client> clients = new ArrayList<>();
 
 		//////////////////////////////////////////////////////

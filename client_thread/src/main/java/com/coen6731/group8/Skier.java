@@ -3,11 +3,11 @@ package com.coen6731.group8;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Random;
-@Document(collection = "resortdata")
+
 public class Skier {
 
 
-    @Id
+
     private String id;
 
     private Integer skierID;

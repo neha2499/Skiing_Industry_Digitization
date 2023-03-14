@@ -3,6 +3,7 @@ package com.coen6731.group8;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.BufferedWriter;
@@ -39,18 +40,19 @@ class SingleThread {
         Instant start_now, end_now, start_now1, end_now1;
         Duration timeElapsed;
 
-        int desired_no_post = 10000;
+        int desired_no_post = 500;
 
         start_now = Instant.now();
         ArrayList<Integer> time = new ArrayList<>();
         for(int i =0 ; i<desired_no_post;i++) {
             start_now1 = Instant.now();
             System.out.println(i);
+            Skier skier = new Skier();
+            Body body = new Body(skier.getTime(), skier.getLiftID());
             WebClient webClient = WebClient.create(url);
-            String responseBody = webClient.post().uri("/check_status")
+            ClientResponse responseBody = webClient.post().uri("/skiers/"+String.valueOf(skier.getSkierID())+"/seasons/"+String.valueOf(skier.getSeasonID())+"/days/"+String.valueOf(skier.getDayID())+"/skiers/"+String.valueOf(skier.getSkierID()))
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                    .retrieve()
-                    .bodyToMono(String.class)
+                    .bodyValue(body).exchange()
                     .block();
             end_now1 = Instant.now();
             String tmp = String.valueOf(Duration.between(start_now1, end_now1).toMillis());
@@ -63,7 +65,6 @@ class SingleThread {
 
         System.out.println(timeElapsed);
         ArrayList<Integer> time_dif = new ArrayList<>();
-        String fileName = "output_Clientseq.csv";
 
 
         Analytics analytics = new Analytics();

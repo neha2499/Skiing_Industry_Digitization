@@ -11,40 +11,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
-class start_end{
-    private String start;
-    private String end;
-
-
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    public String getEnd() {
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
-    }
-
-    @Override
-    public String toString() {
-        return "start_end{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
-    }
-
-    public start_end(String start, String end) {
-        this.start = start;
-        this.end = end;
-    }
-}
 public class thread_client implements Runnable {
     private final CountDownLatch latch;
     private Thread t;
@@ -124,7 +90,6 @@ public class thread_client implements Runnable {
                 end_now = Instant.now();
 //                System.out.println(start_now.toString()+" "+end_now.toString());
                 timeElapsed = Duration.between(start_now, end_now);
-                start_end tmp =new start_end(start_now.toString(), end_now.toString());
                 time_post.add(start_now.toString()+","+"POST"+","+ timeElapsed.toMillis()+","+String.valueOf(response));
 
             }
