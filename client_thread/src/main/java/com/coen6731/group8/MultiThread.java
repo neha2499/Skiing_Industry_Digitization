@@ -20,7 +20,7 @@ import java.util.concurrent.CountDownLatch;
 
 
 class MultiThread {
-	String url = "http://155.248.226.228:8083";
+	String url = "http://localhost:8083";
 
 
 
@@ -43,8 +43,8 @@ class MultiThread {
 
 		Instant start_now, end_now;
 		Duration timeElapsed;
-		int total_client = 100;//50
-		int desired_no_post = 10000;//500
+		int total_client = 50;//50
+		int desired_no_post = 500;//500
 		Analytics analytics=new Analytics();
 
 
@@ -53,7 +53,7 @@ class MultiThread {
 
 
 		Integer no_clients =32;
-		Integer no_post  = 1000 ;//10
+		Integer no_post  = 10 ;//10
 		List<thread_client> clients = new ArrayList<>();
 
 		//////////////////////////////////////////////////////
