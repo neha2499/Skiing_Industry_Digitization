@@ -8,7 +8,7 @@ distributed system model which allows all the Ski Resorts to get
 digital. The idea is to have ski resorts employ RFID lift ticket
 readers to automatically log the skier’s ID and ride duration
 each time they use a ski lift. So, in our Project, we will create
-the client side with the help of multi threading and it will all of
+the client side with the help of multi threading that it will post all of
 the data to the server. The server side is deployed by using the
 Oracle free-tier cloud
 
